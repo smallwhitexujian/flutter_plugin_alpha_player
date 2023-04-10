@@ -12,10 +12,12 @@ import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -31,7 +33,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initDownloadPath() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
+    Directory appDocDir = await getApplicationSupportDirectory();
     String rootPath = appDocDir.path;
     downloadPathList = ["$rootPath/vap_demo1.mp4", "$rootPath/vap_demo2.mp4"];
     print("downloadPathList:$downloadPathList");
@@ -45,10 +47,10 @@ class _MyAppState extends State<MyApp> {
           body: Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 140, 41, 43),
-              image: DecorationImage(image: AssetImage("assets/bg.jpeg")),
-            ),
+            // decoration: BoxDecoration(
+            //   color: Color.fromARGB(255, 140, 41, 43),
+            //   image: DecorationImage(image: AssetImage("assets/bg.jpeg")),
+            // ),
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -72,16 +74,16 @@ class _MyAppState extends State<MyApp> {
                       child: Text("File2 play"),
                       onPressed: () => _playFile(downloadPathList[1]),
                     ),
-                    CupertinoButton(
-                      color: Colors.purple,
-                      child: Text("asset play"),
-                      onPressed: () => _playAsset("assets/demo.mp4"),
-                    ),
-                    CupertinoButton(
-                      color: Colors.purple,
-                      child: Text("stop play"),
-                      onPressed: () => AlphaPlayerController.stop(),
-                    ),
+                    // CupertinoButton(
+                    //   color: Colors.purple,
+                    //   child: Text("asset play"),
+                    //   onPressed: () => _playAsset("assets/demo.mp4"),
+                    // ),
+                    // CupertinoButton(
+                    //   color: Colors.purple,
+                    //   child: Text("stop play"),
+                    //   onPressed: () => AlphaPlayerController.stop(),
+                    // ),
                     CupertinoButton(
                       color: Colors.purple,
                       child: Text("queue play"),
@@ -121,31 +123,31 @@ class _MyAppState extends State<MyApp> {
     if (path == null) {
       return null;
     }
-    var res = await AlphaPlayerController.playPath(path);
+    var res = await AlphaPlayerController.play(path, "demo_play.mp4");
     if (res!["status"] == "failure") {
       showToast(res["errorMsg"]);
     }
     return res;
   }
 
-  Future<Map<dynamic, dynamic>?> _playAsset(String asset) async {
-    if (asset == null) {
-      return null;
-    }
-    var res = await AlphaPlayerController.playAsset(asset);
-    if (res!["status"] == "failure") {
-      showToast(res["errorMsg"]);
-    }
-    return res;
-  }
+  // Future<Map<dynamic, dynamic>?> _playAsset(String asset) async {
+  //   if (asset == null) {
+  //     return null;
+  //   }
+  //   var res = await AlphaPlayerController.play(path,"vap_demo1.mp4");;
+  //   if (res!["status"] == "failure") {
+  //     showToast(res["errorMsg"]);
+  //   }
+  //   return res;
+  // }
 
   _queuePlay() async {
     // 模拟多个地方同时调用播放,使得队列执行播放。
     // Simultaneously call playback in multiple places, making the queue perform playback.
-    QueueUtil.get("vapQueue")
-        ?.addTask(() => AlphaPlayerController.playPath(downloadPathList[0]));
-    QueueUtil.get("vapQueue")
-        ?.addTask(() => AlphaPlayerController.playPath(downloadPathList[1]));
+    QueueUtil.get("vapQueue")?.addTask(
+        () => AlphaPlayerController.play(downloadPathList[0], "demo_play.mp4"));
+    QueueUtil.get("vapQueue")?.addTask(
+        () => AlphaPlayerController.play(downloadPathList[1], "demo_play.mp4"));
   }
 
   _cancelQueuePlay() {

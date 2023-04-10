@@ -2,8 +2,10 @@ group 'com.example.flutter_alpha_player_plugin'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.8.0'
+    ext.kotlin_version = '1.6.0'
     repositories {
+        maven {
+            url 'https://jitpack.io' }
         google()
         mavenCentral()
     }
@@ -18,8 +20,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
+
+
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -46,5 +51,5 @@ android {
 }
 
 dependencies{
-    implementation "io.github.tencent:vap:2.0.28"
+     implementation 'com.github.bytedance:AlphaPlayer:1.0.6'
 }
