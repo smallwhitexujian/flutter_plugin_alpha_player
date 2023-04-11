@@ -23,7 +23,7 @@ class AlphaPlayerController {
   ///[path] 文件存放路径
   ///[fileName] 路径下面的源文件
   ///[isLooping] 是否循环
-  static Future<dynamic?> playVideo(String path, String fileName,
+  static Future<dynamic> playVideo(String path, String fileName,
       {bool isLooping = false}) async {
     _registerPlatformCall();
     return _channel.invokeMethod(
@@ -31,17 +31,17 @@ class AlphaPlayerController {
   }
 
   ///添加播放视频视图
-  static Future<dynamic?> attachView() async {
+  static Future<dynamic> attachView() async {
     return _channel.invokeMethod('attachView');
   }
 
   ///移除视图
-  static Future<dynamic?> detachView() async {
+  static Future<dynamic> detachView() async {
     return _channel.invokeMethod('detachView');
   }
 
   ///释放播放器
-  static Future<dynamic?> releasePlayer() async {
+  static Future<dynamic> releasePlayer() async {
     return _channel.invokeMethod('releasePlayer');
   }
 

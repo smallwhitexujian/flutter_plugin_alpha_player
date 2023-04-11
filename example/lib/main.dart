@@ -3,11 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter_alpha_player_plugin/alpha_player_controller.dart';
 import 'package:flutter_alpha_player_plugin/alpha_player_view.dart';
-import 'package:flutter_alpha_player_plugin/queue_util.dart';
 
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +27,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initDownloadPath();
     AlphaPlayerController.setAlphaPlayerCallBack(
       endAction: () {},
       startAction: () {},
@@ -40,13 +36,6 @@ class _MyAppState extends State<MyApp> {
         log("message $ex");
       },
     );
-  }
-
-  Future<void> initDownloadPath() async {
-    Directory appDocDir = await getApplicationSupportDirectory();
-    String rootPath = appDocDir.path;
-    downloadPathList = ["$rootPath/vap_demo1.mp4", "$rootPath/vap_demo2.mp4"];
-    print("downloadPathList:$downloadPathList");
   }
 
   @override
@@ -64,12 +53,6 @@ class _MyAppState extends State<MyApp> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CupertinoButton(
-                      color: Colors.purple,
-                      onPressed: _download,
-                      child: Text(
-                          "download video source${isDownload ? "(✅)" : ""}"),
-                    ),
                     CupertinoButton(
                       color: Colors.purple,
                       child: Text("播放demo_play.mp4"),
@@ -113,8 +96,6 @@ class _MyAppState extends State<MyApp> {
                   ],
                 ),
                 const IgnorePointer(
-                  // VapView可以通过外层包Container(),设置宽高来限制弹出视频的宽高
-                  // VapView can set the width and height through the outer package Container() to limit the width and height of the pop-up video
                   child: AlphaPlayerView(),
                 ),
               ],
@@ -123,28 +104,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-
-  _download() async {
-    await Dio().download(
-        "http://file.jinxianyun.com/vap_demo1.mp4", downloadPathList[0]);
-    await Dio().download(
-        "http://file.jinxianyun.com/vap_demo2.mp4", downloadPathList[1]);
-    setState(() {
-      isDownload = true;
-    });
-  }
-
-  _queuePlay() async {
-    // 模拟多个地方同时调用播放,使得队列执行播放。
-    // Simultaneously call playback in multiple places, making the queue perform playback.
-    QueueUtil.get("vapQueue")?.addTask(() =>
-        AlphaPlayerController.playVideo(downloadPathList[0], "demo_play.mp4"));
-    QueueUtil.get("vapQueue")?.addTask(() =>
-        AlphaPlayerController.playVideo(downloadPathList[1], "demo_play.mp4"));
-  }
-
-  _cancelQueuePlay() {
-    QueueUtil.get("vapQueue")?.cancelTask();
   }
 }
