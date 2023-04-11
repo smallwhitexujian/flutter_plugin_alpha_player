@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -30,6 +31,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initDownloadPath();
+    AlphaPlayerController.setAlphaPlayerCallBack(
+      platformCallback: (ex) {
+        log("message $ex");
+      },
+    );
   }
 
   Future<void> initDownloadPath() async {
@@ -44,15 +50,11 @@ class _MyAppState extends State<MyApp> {
     return OKToast(
       child: MaterialApp(
         home: Scaffold(
-          body: Container(
+          body: SizedBox(
             width: double.infinity,
             height: double.infinity,
-            // decoration: BoxDecoration(
-            //   color: Color.fromARGB(255, 140, 41, 43),
-            //   image: DecorationImage(image: AssetImage("assets/bg.jpeg")),
-            // ),
             child: Stack(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.center,
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
@@ -60,39 +62,49 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     CupertinoButton(
                       color: Colors.purple,
+                      onPressed: _download,
                       child: Text(
                           "download video source${isDownload ? "(✅)" : ""}"),
-                      onPressed: _download,
                     ),
                     CupertinoButton(
                       color: Colors.purple,
-                      child: Text("File1 play"),
-                      onPressed: () => _playFile(downloadPathList[0]),
+                      child: Text("播放demo_play.mp4"),
+                      onPressed: () async {
+                        var dir = await getExternalStorageDirectory();
+                        log("-------------${dir?.path}->");
+                        Directory(dir!.path).create(recursive: true);
+
+                        var result = await AlphaPlayerController.playVideo(
+                            dir.path, "demo_play.mp4");
+                      },
                     ),
                     CupertinoButton(
                       color: Colors.purple,
-                      child: Text("File2 play"),
-                      onPressed: () => _playFile(downloadPathList[1]),
-                    ),
-                    // CupertinoButton(
-                    //   color: Colors.purple,
-                    //   child: Text("asset play"),
-                    //   onPressed: () => _playAsset("assets/demo.mp4"),
-                    // ),
-                    // CupertinoButton(
-                    //   color: Colors.purple,
-                    //   child: Text("stop play"),
-                    //   onPressed: () => AlphaPlayerController.stop(),
-                    // ),
-                    CupertinoButton(
-                      color: Colors.purple,
-                      child: Text("queue play"),
-                      onPressed: _queuePlay,
+                      child: Text("播放assets demo1.mp4"),
+                      onPressed: () {
+                        AlphaPlayerController.playVideo("/assets/", "demo.mp4");
+                      },
                     ),
                     CupertinoButton(
                       color: Colors.purple,
-                      child: Text("cancel queue play"),
-                      onPressed: _cancelQueuePlay,
+                      child: Text("attachView"),
+                      onPressed: () {
+                        AlphaPlayerController.attachView();
+                      },
+                    ),
+                    CupertinoButton(
+                      color: Colors.purple,
+                      child: Text("detachView"),
+                      onPressed: () {
+                        AlphaPlayerController.detachView();
+                      },
+                    ),
+                    CupertinoButton(
+                      color: Colors.purple,
+                      child: Text("releasePlayer"),
+                      onPressed: () {
+                        AlphaPlayerController.releasePlayer();
+                      },
                     ),
                   ],
                 ),
@@ -119,35 +131,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<Map<dynamic, dynamic>?> _playFile(String path) async {
-    if (path == null) {
-      return null;
-    }
-    var res = await AlphaPlayerController.play(path, "demo_play.mp4");
-    if (res!["status"] == "failure") {
-      showToast(res["errorMsg"]);
-    }
-    return res;
-  }
-
-  // Future<Map<dynamic, dynamic>?> _playAsset(String asset) async {
-  //   if (asset == null) {
-  //     return null;
-  //   }
-  //   var res = await AlphaPlayerController.play(path,"vap_demo1.mp4");;
-  //   if (res!["status"] == "failure") {
-  //     showToast(res["errorMsg"]);
-  //   }
-  //   return res;
-  // }
-
   _queuePlay() async {
     // 模拟多个地方同时调用播放,使得队列执行播放。
     // Simultaneously call playback in multiple places, making the queue perform playback.
-    QueueUtil.get("vapQueue")?.addTask(
-        () => AlphaPlayerController.play(downloadPathList[0], "demo_play.mp4"));
-    QueueUtil.get("vapQueue")?.addTask(
-        () => AlphaPlayerController.play(downloadPathList[1], "demo_play.mp4"));
+    QueueUtil.get("vapQueue")?.addTask(() =>
+        AlphaPlayerController.playVideo(downloadPathList[0], "demo_play.mp4"));
+    QueueUtil.get("vapQueue")?.addTask(() =>
+        AlphaPlayerController.playVideo(downloadPathList[1], "demo_play.mp4"));
   }
 
   _cancelQueuePlay() {

@@ -39,7 +39,7 @@ class VideoGiftView: FrameLayout,LifecycleOwner {
     private var mVideoContainer :RelativeLayout
     private val mRegistry = LifecycleRegistry(this)
     private lateinit var mPlayerController: IPlayerController
-
+    private var isAttach = false
 
     init {
         //创建一个空的布局
@@ -66,19 +66,8 @@ class VideoGiftView: FrameLayout,LifecycleOwner {
 
     }
 
-    //初始化播放器的控制器
-    fun initPlayerController(
-        context: Context,
-        playerAction: IPlayerAction = playListener
-    ) {
-        val configuration = Configuration(context, this)
-        // 支持GLSurfaceView&GLTextureView, 默认使用GLSurfaceView
-        configuration.alphaVideoViewType = AlphaVideoViewType.GL_TEXTURE_VIEW
-        //也可以设置自行实现的Player, demo中提供了基于ExoPlayer的实现
-        mPlayerController = PlayerController.get(configuration, DefaultSystemPlayer())
-        mPlayerController.setPlayerAction(playerAction)
-        mPlayerController.setMonitor(object : IMonitor {
-            override fun monitor(
+    private val monitor2 :IMonitor = object :IMonitor{
+        override fun monitor(
                 result: Boolean,
                 playType: String,
                 what: Int,
@@ -90,8 +79,21 @@ class VideoGiftView: FrameLayout,LifecycleOwner {
                     "call monitor(), state: $result, playType = $playType, what = $what, extra = $extra, errorInfo 错误信息展示 = $errorInfo"
                 )
             }
+    }
 
-        })
+    //初始化播放器的控制器
+    fun initPlayerController(
+        context: Context,
+        playerAction: IPlayerAction = playListener,
+        monitor:IMonitor = monitor2
+    ) {
+        val configuration = Configuration(context, this)
+        // 支持GLSurfaceView&GLTextureView, 默认使用GLSurfaceView
+        configuration.alphaVideoViewType = AlphaVideoViewType.GL_TEXTURE_VIEW
+        //也可以设置自行实现的Player, demo中提供了基于ExoPlayer的实现
+        mPlayerController = PlayerController.get(configuration, DefaultSystemPlayer())
+        mPlayerController.setPlayerAction(playerAction)
+        mPlayerController.setMonitor(monitor)
     }
 
 
@@ -138,11 +140,16 @@ class VideoGiftView: FrameLayout,LifecycleOwner {
 
     //同步窗体,动画站位布局填充到window
     fun attachView() {
-        mPlayerController.attachAlphaView(mVideoContainer)
+        if(!isAttach){
+            isAttach = true
+            mPlayerController.attachAlphaView(mVideoContainer)
+        }
+      
     }
 
     //移除动画窗体
     fun detachView() {
+        isAttach = false
         mPlayerController.detachAlphaView(mVideoContainer)
     }
 
