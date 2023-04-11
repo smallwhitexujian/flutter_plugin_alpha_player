@@ -32,6 +32,10 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initDownloadPath();
     AlphaPlayerController.setAlphaPlayerCallBack(
+      endAction: () {},
+      startAction: () {},
+      monitorCallbacks: (expand) {},
+      onVideoSizeChanged: (expand) {},
       platformCallback: (ex) {
         log("message $ex");
       },

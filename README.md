@@ -40,3 +40,57 @@ flutter_alpha_player_plugin: ^1.0.1
 ```
 $ flutter pub add flutter_alpha_player_plugin
 ```
+
+## 使用方式
+```Dart
+ @override
+  void initState() {
+    super.initState();
+    ///注册监听器
+    AlphaPlayerController.setAlphaPlayerCallBack(
+        ///播放结束回调
+      endAction: () {
+        
+      },
+      ///播放开始回调
+      startAction: () {
+        
+      },
+      ///播放器监听
+      monitorCallbacks: (expand) {
+        
+      },
+      ///视频尺寸变化回调
+      onVideoSizeChanged: (expand) {
+        
+      },
+      ///扩展回调
+      platformCallback: (ex) {
+        log("message $ex");
+      },
+    );
+  }
+
+  .....
+
+  const IgnorePointer(
+    ///添加透明视频布局，添加到合适的位置
+    child: AlphaPlayerView(),
+    ),
+
+///播放视频
+///[path] 文件存放地址
+///[name] 文件名称
+///[isLooper] 是否重复播放
+ var result = await AlphaPlayerController.playVideo( dir.path, "demo_play.mp4");
+
+///添加视图
+AlphaPlayerController.attachView();
+
+///移除视图
+AlphaPlayerController.detachView();
+
+///释放播放器
+AlphaPlayerController.releasePlayer();
+```
+
