@@ -57,12 +57,20 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.purple,
                       child: Text("播放demo_play.mp4"),
                       onPressed: () async {
-                        var dir = await getExternalStorageDirectory();
-                        log("-------------${dir?.path}->");
-                        Directory(dir!.path).create(recursive: true);
+                        if (Platform.isAndroid) { /// 安卓路径读取方式
+                          var dir = await getExternalStorageDirectory();
+                          log("-------------${dir?.path}->");
+                          Directory(dir!.path).create(recursive: true);
 
-                        var result = await AlphaPlayerController.playVideo(
-                            dir.path, "demo_play.mp4");
+                          var result = await AlphaPlayerController.playVideo(
+                              dir.path, "demo_play.mp4");
+                        } else if (Platform.isIOS) { /// iOS 路径读取方式
+                          var dir = await getLibraryDirectory();
+                          var library = dir.path;
+                          var filePath = "$library/ttyy/1";
+                          var result = await AlphaPlayerController.playVideo(
+                              filePath, "1.mp4");
+                        }
                       },
                     ),
                     CupertinoButton(
