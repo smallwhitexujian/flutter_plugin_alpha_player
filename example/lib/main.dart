@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
                     CupertinoButton(
                       color: Colors.purple,
                       child: Text("播放assets demo1.mp4"),
-                      onPressed: () {
+                      onPressed: () { /// iOS 由于基于字节播放器的二次封装，内部需要解析config.json 文件来读取资源，所以，视频同级目录内都要有一个对应的config.json文件
                         AlphaPlayerController.playVideo("/assets/", "demo.mp4");
                       },
                     ),
