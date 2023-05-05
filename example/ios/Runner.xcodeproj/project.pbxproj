@@ -76,7 +76,6 @@
 				4733F4FC3CDF0A57BF071145 /* Pods-Runner.release.xcconfig */,
 				13115B36436E87A6F16A5F02 /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -495,7 +494,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kd.nigo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterAlphaPlayerPluginExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = nigoDevelopmentProfiles;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

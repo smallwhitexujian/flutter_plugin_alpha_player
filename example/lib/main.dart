@@ -67,6 +67,7 @@ class _MyAppState extends State<MyApp> {
                         } else if (Platform.isIOS) { /// iOS 路径读取方式
                           var dir = await getLibraryDirectory();
                           var library = dir.path;
+                          /// 此路径为自己调试的沙盒存储路径，开发者可根据自己的文件存储路径进行相应替换，完整路径应该为（$library/自定义文件夹/x/x.mp4）
                           var filePath = "$library/ttyy/1";
                           var result = await AlphaPlayerController.playVideo(
                               filePath, "1.mp4");
