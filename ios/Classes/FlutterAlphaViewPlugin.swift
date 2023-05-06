@@ -16,14 +16,17 @@ class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,NG_AlphaPlayerCallBac
     private var _frame:CGRect?
     /// flutter 传的参数
     private var _arguments:Any?
+    /// 交互注册对象
+    private var _pluginRegistrar:FlutterPluginRegistrar?
     
      /// 自定义初始化方法
-     init(frame:CGRect,viewIdentifier:Int64,arguments:Any,binaryMessenger:FlutterBinaryMessenger) {
+     init(frame:CGRect,viewIdentifier:Int64,arguments:Any,pluginRegistrar:FlutterPluginRegistrar) {
         super.init()
          _frame = frame
          _arguments = arguments
+         _pluginRegistrar = pluginRegistrar
          ///建立通信通道 用来 监听Flutter 的调用和 调用Fluttter 方法 这里的名称要和Flutter 端保持一致
-         _methodChannel = FlutterMethodChannel(name: "flutter_alpha_player_plugin", binaryMessenger: binaryMessenger)
+         _methodChannel = FlutterMethodChannel(name: "flutter_alpha_player_plugin", binaryMessenger: pluginRegistrar.messenger())
          _methodChannel?.setMethodCallHandler(handleMethod)
     }
     
@@ -45,6 +48,18 @@ class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,NG_AlphaPlayerCallBac
             let  path  = params["path"]
             let name = params["name"]
             self.playerNativeView.startPlayerWithFilePath(filePath: path as? String, fileName: name as? String, playerOrientation: 0)
+            result(0)
+            break
+        case "playAssetVideo": /// 开始播放
+            if (call.arguments is [String:Any] == false) {return};
+            let params:Dictionary = call.arguments as? [String: Any] ?? [String:Any]();
+            if params.isEmpty { return };
+            let  path  = params["path"]
+            let name = params["name"]
+            let assetPath = _pluginRegistrar?.lookupKey(forAsset: path as! String)
+            let filePath = Bundle.main.path(forResource: assetPath, ofType: nil)
+            
+            self.playerNativeView.startPlayerWithFilePath(filePath: filePath, fileName: name as? String, playerOrientation: 0)
             result(0)
             break
         case "attachView": /// 同步视图

@@ -67,6 +67,7 @@ class _MyAppState extends State<MyApp> {
                         } else if (Platform.isIOS) { /// iOS 路径读取方式
                           var dir = await getLibraryDirectory();
                           var library = dir.path;
+                          /// 此路径为自己调试的沙盒存储路径，开发者可根据自己的文件存储路径进行相应替换，完整路径应该为（$library/自定义文件夹/x/x.mp4）
                           var filePath = "$library/ttyy/1";
                           var result = await AlphaPlayerController.playVideo(
                               filePath, "1.mp4");
@@ -77,7 +78,13 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.purple,
                       child: Text("播放assets demo1.mp4"),
                       onPressed: () {
-                        AlphaPlayerController.playVideo("/assets/", "demo.mp4");
+                        if (Platform.isAndroid) { /// 安卓路径读取方式
+                          AlphaPlayerController.playVideo("/assets/", "demo.mp4");
+                        } else if (Platform.isIOS) { /// iOS 路径读取方式
+                          /// iOS 由于基于字节播放器的二次封装，内部需要解析config.json 文件来读取资源，所以，视频同级目录内都要有一个对应的config.json文件
+                          /// assets 文件夹，也可替换为自定义的文件夹
+                          AlphaPlayerController.playAssetVideo("assets", "demo1.mp4");
+                        }
                       },
                     ),
                     CupertinoButton(
