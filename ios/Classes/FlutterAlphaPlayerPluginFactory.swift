@@ -10,12 +10,12 @@ import Flutter
 class FlutterAlphaPlayerPluginFactory: NSObject,FlutterPlatformViewFactory {
     
     /// 注册对象
-    var _binaryMessenger:FlutterBinaryMessenger?
+    var _pluginRegistrar:FlutterPluginRegistrar?
     
     /// 自定义初始化方法
-    init(binaryMessenger:FlutterBinaryMessenger) {
+    init(pluginRegistrar:FlutterPluginRegistrar) {
         super.init()
-        _binaryMessenger = binaryMessenger;
+        _pluginRegistrar = pluginRegistrar;
     }
     
     // MARK: - 实现FlutterPlatformViewFactory 代理方法
@@ -30,7 +30,7 @@ class FlutterAlphaPlayerPluginFactory: NSObject,FlutterPlatformViewFactory {
     /// @param viewId view的id
     /// @param args 初始化的参数
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FlutterAlphaViewPlugin(frame: frame, viewIdentifier: viewId, arguments: args as Any, binaryMessenger: _binaryMessenger!)
+        return FlutterAlphaViewPlugin(frame: frame, viewIdentifier: viewId, arguments: args as Any, pluginRegistrar: _pluginRegistrar!)
     }
     
 

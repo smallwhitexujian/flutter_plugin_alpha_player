@@ -10,7 +10,7 @@ public class FlutterAlphaPlayerPlugin: NSObject, FlutterPlugin {
 //    let instance = FlutterAlphaPlayerPlugin()
 //    registrar.addMethodCallDelegate(instance, channel: channel)
         
-    let playerPluginFactory = FlutterAlphaPlayerPluginFactory(binaryMessenger: registrar.messenger())
+    let playerPluginFactory = FlutterAlphaPlayerPluginFactory(pluginRegistrar: registrar)
     /// 这里填写的id 一定要和dart里面的viewType 这个参数传的id一致
     registrar.register(playerPluginFactory, withId: "flutter_alpha_player")
   }
