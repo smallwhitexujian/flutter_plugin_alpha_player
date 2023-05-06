@@ -16,6 +16,9 @@ A few resources to get you started if this is your first Flutter project:
  此路径为自己调试的沙盒存储路径，开发者可根据自己的文件存储路径进行相应替换，完整路径应该为（$library/自定义文件夹/x/x.mp4（x 表示上级文件夹以及视频名字是同一个名字））
 
 2.如果是播放项目目录里面的视频资源，视频文件同级目录下也要有config.json 文件，里面的配置信息，可参考demo中进行自行配置，也可参考字节的官方链接进行json 文件的配置
+3. info.plist  里面要添加 
+io.flutter.embedded_views_preview  boolean  1
+
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
