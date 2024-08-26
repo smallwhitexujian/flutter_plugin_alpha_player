@@ -72,7 +72,9 @@ internal class NativeAlphaPlayer(
                 val path  = call.argument<String>("path")
                 val name = call.argument<String>("name")
                 val isLooper = call.argument<Boolean>("looping")
-                alphaPlayer.startVideoGift(path ,name,2,8,isLooper)
+                val portraitPath = call.argument<Int>("portraitPath")?:1
+                val landscapePath = call.argument<Int>("landscapePath")?:8
+                alphaPlayer.startVideoGift(path ,name,portraitPath,landscapePath,isLooper)
                 result.success(0)
             }
             //同步视图

@@ -23,22 +23,49 @@ class AlphaPlayerController {
   ///[path] 文件存放路径
   ///[fileName] 路径下面的源文件
   ///[isLooping] 是否循环
+  ///[portraitPath] 竖向，
+  ///[landscapePath] 横向，
+  ///                  ScaleToFill(0),             //  拉伸铺满全屏
+  ///                  ScaleAspectFitCenter(1),    //  等比例缩放对齐全屏，居中，屏幕多余留空
+  ///                  ScaleAspectFill(2),         //  等比例缩放铺满全屏，裁剪视频多余部分
+  ///                  TopFill(3),                 //  等比例缩放铺满全屏，顶部对齐
+  ///                  BottomFill(4),              //  等比例缩放铺满全屏，底部对齐
+  ///                  LeftFill(5),                //  等比例缩放铺满全屏，左边对齐
+  ///                  RightFill(6),               //  等比例缩放铺满全屏，右边对齐
+  ///                  TopFit(7),                  //  等比例缩放至屏幕宽度，顶部对齐，底部留空
+  ///                  BottomFit(8),               //  等比例缩放至屏幕宽度，底部对齐，顶部留空
+  ///                  LeftFit(9),                 //  等比例缩放至屏幕高度，左边对齐，右边留空
+  ///                  RightFit(10);               //  等比例缩放至屏幕高度，右边对齐，左边留空
   static Future<dynamic> playVideo(String path, String fileName,
-      {bool isLooping = false}) async {
+      {int portraitPath = 2,
+      int landscapePath = 8,
+      bool isLooping = false}) async {
     _registerPlatformCall();
-    return _channel.invokeMethod(
-        'playVideo', {"path": path, "name": fileName, "looping": isLooping});
+    return _channel.invokeMethod('playVideo', {
+      "path": path,
+      "name": fileName,
+      "portraitPath": portraitPath,
+      "landscapePath": landscapePath,
+      "looping": isLooping
+    });
   }
 
-  ///播放Asset目录下的视频
+  ///播放Asset目录下的视频 iOS 读取assets 目录的方法
   ///[path] 文件存放路径
   ///[fileName] 路径下面的源文件
   ///[isLooping] 是否循环
   static Future<dynamic> playAssetVideo(String path, String fileName,
-      {bool isLooping = false}) async {
+      {int portraitPath = 2,
+      int landscapePath = 8,
+      bool isLooping = false}) async {
     _registerPlatformCall();
-    return _channel.invokeMethod(
-        'playAssetVideo', {"path": path, "name": fileName, "looping": isLooping});
+    return _channel.invokeMethod('playAssetVideo', {
+      "path": path,
+      "name": fileName,
+      "portraitPath": portraitPath,
+      "landscapePath": landscapePath,
+      "looping": isLooping
+    });
   }
 
   ///添加播放视频视图
