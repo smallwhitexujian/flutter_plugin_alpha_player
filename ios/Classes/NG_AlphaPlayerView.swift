@@ -63,7 +63,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
             }
         }else {
             if (delegate != nil) {
-                delegate?.alphaPlayerDidFinishPlaying(isNormalFinsh: false, errorStr: String(format: "%@", error.localizedDescription))
+                delegate?.alphaPlayerDidFinishPlaying(isNormalFinsh: false, errorStr: "播放器结束")
             }
         }
     }
@@ -106,6 +106,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
     /// 停止播放 -- 停止显示而不调用didFinishPlayingWithError方法，不会触发停止回调
     func stopAlphaPlayer() {
         playerMetalView?.stop()
+        removeAlphaPlayerViewFromSuperView()
     }
     
     /// 通过调用didFinishPlayingWithError方法停止显示，会触发停止回调
@@ -234,7 +235,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
     
     /// 释放播放器
     deinit {
-        playerStopWithFinishPlayingCallback()
+        stopAlphaPlayer()
         removeAlphaPlayerViewFromSuperView()
     }
     
