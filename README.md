@@ -40,7 +40,7 @@ AlphaPlayer是直播中台使用的一个视频动画特效SDK，可以通过制
 添加依赖
 
 ```cmd
-flutter_alpha_player_plugin: ^1.0.4
+flutter_alpha_player_plugin: ^1.0.5
 ```
 
 或者执行

@@ -8,7 +8,7 @@ import BDAlphaPlayer
 import UIKit
 
 /// 回调事件
-protocol NG_AlphaPlayerCallBackActionDelegate {
+protocol KG_AlphaPlayerCallBackActionDelegate {
     
     /// 开始播放
     func alphaPlayerStartPlay()
@@ -21,10 +21,10 @@ protocol NG_AlphaPlayerCallBackActionDelegate {
 }
 
 /// 播放器
-class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
+class KG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
 
     /// 代理
-    var delegate:NG_AlphaPlayerCallBackActionDelegate?
+    var delegate:KG_AlphaPlayerCallBackActionDelegate?
     
     /// 播放器视图
     var playerMetalView :BDAlphaPlayerMetalView?
@@ -77,7 +77,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
     // MARK: - public
     
     /// 开始播放视频
-     // @param filePath /data/user/0/nigo/gift/file
+     // @param filePath /data/user/0/App/gift/file
      // @param fileName 文件名字
      // @param playerOrientation 屏幕样式 （0 竖屏 1 横屏）
 
@@ -170,7 +170,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
     /// 处理文件路径
     private func subStringWithFilePath(filePath:String,fileName:String) -> Bool {
         if (filePath.contains(".mp4") == true) {
-            if let subIndex = filePath.lastIndex(of:"/") { /// 截取出来文件夹的路径（/data/user/0/nigo/gift/123456）
+            if let subIndex = filePath.lastIndex(of:"/") { /// 截取出来文件夹的路径（/data/user/0/App/gift/123456）
                 let subFilePath = filePath[..<subIndex]
                 let configSubFilePath = String((subFilePath.appending("/config.json")))
                 let isExists = configFileIsExists(configFilePath: configSubFilePath,fileName: fileName) as Bool
@@ -179,7 +179,7 @@ class NG_AlphaPlayerView: UIView,BDAlphaPlayerMetalViewDelegate {
                 }
             }
             return false
-        }else { //不包含文件具体的名字 /data/user/0/nigo/gift/123456
+        }else { //不包含文件具体的名字 /data/user/0/App/gift/123456
             let configSubFilePath = String((filePath.appending("/config.json")))
             let isExists = configFileIsExists(configFilePath: configSubFilePath,fileName: fileName)
             if isExists {

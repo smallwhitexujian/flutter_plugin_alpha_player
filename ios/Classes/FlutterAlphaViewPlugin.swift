@@ -8,7 +8,7 @@
 import UIKit
 import Flutter
 
-class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,NG_AlphaPlayerCallBackActionDelegate {
+class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,KG_AlphaPlayerCallBackActionDelegate {
     
     /// 通信通道
     var _methodChannel :FlutterMethodChannel?
@@ -104,7 +104,7 @@ class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,NG_AlphaPlayerCallBac
         return nil
     }
     
-    // MARK: - NG_AlphaPlayerCallBackActionDelegate
+    // MARK: - KG_AlphaPlayerCallBackActionDelegate
     
     /// 开始播放
     func alphaPlayerStartPlay() {
@@ -124,8 +124,8 @@ class FlutterAlphaViewPlugin: NSObject,FlutterPlatformView,NG_AlphaPlayerCallBac
     // MARK: - lazy
     
     /// 原生视图view
-    lazy var playerNativeView: NG_AlphaPlayerView = {
-        let tempNativeView = NG_AlphaPlayerView()
+    lazy var playerNativeView: KG_AlphaPlayerView = {
+        let tempNativeView = KG_AlphaPlayerView()
         tempNativeView.delegate = self;
         return tempNativeView
     }()
